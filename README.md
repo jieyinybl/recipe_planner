@@ -14,3 +14,4 @@ TODO
 ### References
 * The inspiration of this project comes from: https://github.com/actions-on-google/dialogflow-silly-name-maker-webhook-nodejs
 * Public APIs: https://github.com/toddmotto/public-apis
+* How to build a chatbot with dialog flow: https://medium.com/swlh/how-to-build-a-chatbot-with-dialog-flow-chapter-4-external-api-for-fulfilment-3ab934fd7a00
