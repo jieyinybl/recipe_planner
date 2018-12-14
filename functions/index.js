@@ -50,19 +50,39 @@ function searchRecipe(ingredient, diet_type, health_label, CloudFnResponse) {
 
     console.log('path string:' + pathString);
 
+    if (ingredient.length === 0) {
+        return CloudFnResponse.send(buildChatResponse('What kind of meat do you want to eat? Beef, pork, chicken, lamb, or dear?'))
+    }
+
+    if (diet_type.length === 0) {
+        return CloudFnResponse.send(buildChatResponse('What kind of diet do you prefer? Balanced, high-fiber, high-protein, low-carb, low-fat, or low-sodium?'))
+    }
+
+    if (health_label.length === 0) {
+        return CloudFnResponse.send(buildChatResponse('What is your health label? Like alcohol-free, gluten-free, sugar-conscious, vegan, vegetarian etc?'))
+    }
+
     request('https://api.edamam.com' + pathString, (error, response, body) => {
         if (error) {
             // TODO error handling
         }
-        const jsonData = JSON.parse(body);
+        console.log('body', body, typeof body);
+        const jsonData = typeof body === 'string' ? JSON.parse(body) : body;
+        console.log('jsonData', jsonData);
         const recipeNames = jsonData.hits.map((searchResult) => {
             console.log('searchResult:', searchResult);
             console.log('label', searchResult.recipe.label);
             return searchResult.recipe.label;
         });
-        console.log("the recipe found is: ", jsonData);
+        const recipeUrls = jsonData.hits.map((searchResult) => {
+            console.log('label', searchResult.recipe.url);
+            return searchResult.recipe.url;
+        });
 
-        const chat = recipeNames.join(', ');
+        const recipeNames2 = recipeNames.join(', ');
+        const recipeUrls2 = recipeUrls.join(', ');
+
+        const chat = 'The recipe found is: ' + recipeNames2 + ". Which one do you like to have a look? " + recipeUrls2;
         console.log('chat', chat);
 
         CloudFnResponse.send(buildChatResponse(chat));
